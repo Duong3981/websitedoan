@@ -14,11 +14,11 @@
             font-family: 'Be Vietnam Pro', sans-serif;
             width: 100%;
         }
-        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .category-card { transition: all 0.3s ease-in-out; }
         .category-card:hover { transform: translateY(-10px) rotate(-2deg); box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.2); }
         .swiper-container { width: 100%; padding-top: 50px; padding-bottom: 50px; }
-        .swiper-slide { width: 340px; height: 500px; border-radius: 1.5rem; overflow: hidden; transition: transform 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .swiper-slide { will-change: transform; width: 340px; height: 500px; border-radius: 1.5rem; overflow: hidden; transition: transform 0.4s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .nav-active { color: #2563eb; font-weight: 700; }
         .scroll-animate { opacity: 0; transform: translateY(30px) scale(0.95); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
         .scroll-animate.is-visible { opacity: 1; transform: translateY(0) scale(1); }
@@ -271,7 +271,7 @@
     </main>
 
     <div id="modal-mua-he-xanh" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-green-700">Tình Nguyện</span>
@@ -287,7 +287,7 @@
         </div>
     </div>
     <div id="modal-xuan-tinh-nguyen" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-orange-700">Tình Nguyện</span>
@@ -304,7 +304,7 @@
     </div>
     
     <div id="modal-hoi-thao" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-sky-700">Văn - Thể - Mỹ</span>
@@ -320,7 +320,7 @@
         </div>
     </div>
     <div id="modal-van-nghe" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-fuchsia-700">Văn - Thể - Mỹ</span>
@@ -336,7 +336,7 @@
         </div>
     </div>
     <div id="modal-toa-dam" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-blue-700">Học Thuật</span>
@@ -352,7 +352,7 @@
         </div>
     </div>
     <div id="modal-hien-mau" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-        <div class="modal-content glass-card rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="modal-content glass-card rounded-2xl max-w-1xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-8 relative">
                 <button class="modal-close absolute top-4 right-4 bg-white/50 w-8 h-8 rounded-full hover:bg-white transition-colors z-10">&times;</button>
                 <span class="text-xs font-bold uppercase text-red-700">Tình Nguyện</span>
@@ -462,7 +462,7 @@
                     grabCursor: true,
                     loop: true,
                     speed: 800,
-                    autoplay: { delay: 3500, disableOnInteraction: false, },
+                    autoplay: { delay: 3500, disableOnInteraction: true, },
                     cardsEffect: { slideShadows: false, },
                 });
             }
