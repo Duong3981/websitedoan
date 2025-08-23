@@ -12,10 +12,10 @@
         html, body {
             font-family: 'Be Vietnam Pro', sans-serif;
             width: 100%;
-            /* Dòng lệnh overflow-x: hidden; đã được gỡ bỏ khỏi đây để sửa lỗi sticky header */
+            overflow-x: hidden; 
         }
         .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .gradient-text { background: linear-gradient(90deg, #38bdf8, #a78bfa, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text { display: inline-block; background: linear-gradient(90deg, #38bdf8, #a78bfa, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .cta-button { box-shadow: 0px 5px 20px rgba(59, 130, 246, 0.4); transition: all 0.3s ease-in-out; }
         .cta-button:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0px 8px 25px rgba(59, 130, 246, 0.6); }
         .nav-active { color: #2563eb; font-weight: 700; }
@@ -31,7 +31,6 @@
         }
         .deco-shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
 
-        /* --- CSS FOR ROBUST MOBILE MENU --- */
         #mobile-menu {
             visibility: hidden;
             transition: visibility 0.3s;
@@ -53,17 +52,31 @@
         #mobile-menu.is-open #mobile-menu-backdrop {
             opacity: 1;
         }
+
+        @keyframes gradient-pan {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .header-gradient-text {
+            background-image: linear-gradient(to right, #3b82f6, #22d3ee, #3b82f6); /* Blue-500 to Cyan-400 to Blue-500 */
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-pan 5s linear infinite;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    
+
     <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
-        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-3 z-20">
-                <img src="pic/logo/logodt.png" alt="Logo Đoàn Trường UEL" class="w-auto h-12">
-                <span class="text-xl font-extrabold text-gray-800 tracking-tight">ĐOÀN TRƯỜNG UEL</span>
+        <div class="container mx-auto px-6 py-2 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 z-20">
+                <img src="pic/logo/logodt.png" alt="Logo Đoàn Trường UEL" class="h-10 w-auto">
+                <span class="text-xl font-extrabold tracking-tight header-gradient-text">ĐOÀN TRƯỜNG UEL</span>
             </a>
-            
+
             <nav class="hidden md:flex items-center space-x-8" id="main-nav"><a href="gioithieu.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Giới thiệu</a><a href="tochuc.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Tổ chức</a><a href="hoat-dong.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Hoạt động</a><a href="quy-trinh.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Quy trình</a><a href="https://www.facebook.com/youth.uel" target="_blank" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Liên hệ</a></nav>
 
             <div class="flex items-center gap-4">
@@ -76,17 +89,17 @@
     </header>
 
     <main class="flex-grow">
-        <section class="relative h-screen flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-sky-100 via-violet-100 to-rose-100">
+        <section id="hero-section" class="relative flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-sky-100 via-violet-100 to-rose-100">
             <div class="deco-shape w-48 h-48 rounded-full bg-sky-300/50 -top-10 -left-20"></div>
             <div class="deco-shape w-60 h-60 rounded-xl bg-rose-300/50 top-20 -right-20 transform rotate-45" style="animation-delay: -2s;"></div>
             <div class="deco-shape w-32 h-32 rounded-full bg-violet-300/50 bottom-10 left-1/4" style="animation-delay: -4s;"></div>
             
-            <div class="relative z-10 flex flex-col items-center px-4 py-20 scroll-animate">
-                <img src="pic/logo/logodt.png" alt="Logo Đoàn Trường UEL" class="w-100 h-auto md:w-48 mb-8 transform hover:scale-110 transition-transform duration-300">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-wider text-slate-800 mb-6 leading-normal">
-                    Kiến Tạo Tương Lai Cùng<br/>  <span class="gradient-text">Tuổi Trẻ UEL</span>
+            <div class="relative z-10 flex flex-col items-center justify-center w-full px-4 py-8 scroll-animate">
+                <img src="pic/logo/logodt.png" alt="Logo Đoàn Trường UEL" class="h-auto mb-0 transform hover:scale-110 transition-transform duration-300" style="width: 400px; max-width: 55%;">
+                <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider text-slate-800 mb-3 leading-tight md:leading-snug">
+                    Kiến Tạo Tương Lai Cùng<br> <span class="gradient-text py-3 -my-3">Tuổi Trẻ UEL</span>
                 </h1>
-                <p class="max-w-3xl text-lg md:text-xl text-gray-600 mb-12 leading-relaxed">
+                <p class="max-w-3xl text-lg md:text-xl text-gray-600 mb-5 leading-normal">
                     Đây không chỉ là một lời mời, mà là cơ hội để bạn bứt phá giới hạn, ghi dấu thanh xuân và trở thành phiên bản tốt nhất của chính mình.
                 </p>
                 <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="cta-button bg-blue-600 text-white font-bold text-xl py-4 px-12 rounded-full uppercase tracking-widest">
@@ -135,23 +148,23 @@
                 <div class="text-center mb-16 scroll-animate">
                     <span class="font-semibold text-orange-600">SÂN CHƠI SÔI NỔI</span>
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-800 my-3 tracking-tight">Trải Nghiệm Muôn Màu</h2>
-                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Từ những chiến dịch tình nguyện ý nghĩa đến các sân chơi học thuật tới những sự kết nối đặc biệt.</p>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Từ những chiến dịch tình nguyện ý nghĩa đến các sân chơi học thuật và văn nghệ đỉnh cao.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <a href="hoat-dong.html" class="activity-card group block relative rounded-2xl overflow-hidden glass-card p-4 shadow-xl scroll-animate transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300" style="transition-delay: 100ms;">
-                        <img src="pic/gioithieu/muahexanh.jpg" alt="Tình Nguyện" class="rounded-lg w-full h-full object-cover">
+                        <img src="https://placehold.co/400x500/16a34a/ffffff?text=Tình+Nguyện" alt="Tình Nguyện" class="rounded-lg w-full h-full object-cover">
                         <div class="absolute inset-4 bg-gradient-to-t from-black/70 to-transparent rounded-lg"></div>
                         <h3 class="absolute bottom-10 left-10 text-2xl font-bold text-white">Chiến Dịch Tình Nguyện</h3>
                     </a>
                      <a href="hoat-dong.html" class="activity-card group block relative rounded-2xl overflow-hidden glass-card p-4 shadow-xl scroll-animate transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300" style="transition-delay: 200ms;">
-                        <img src="pic/gioithieu/hoithao.jpg" alt="Hội Thao" class="rounded-lg w-full h-full object-cover">
+                        <img src="https://placehold.co/400x500/0ea5e9/ffffff?text=Hội+Thao" alt="Hội Thao" class="rounded-lg w-full h-full object-cover">
                         <div class="absolute inset-4 bg-gradient-to-t from-black/70 to-transparent rounded-lg"></div>
                         <h3 class="absolute bottom-10 left-10 text-2xl font-bold text-white">Sân Chơi Thể Thao</h3>
                     </a>
                      <a href="hoat-dong.html" class="activity-card group block relative rounded-2xl overflow-hidden glass-card p-4 shadow-xl scroll-animate transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300" style="transition-delay: 300ms;">
-                        <img src="pic/gioithieu/ketnoi.jpg" alt="Kết nối" class="rounded-lg w-full h-full object-cover">
+                        <img src="https://placehold.co/400x500/c026d3/ffffff?text=Văn+Nghệ" alt="Văn Nghệ" class="rounded-lg w-full h-full object-cover">
                         <div class="absolute inset-4 bg-gradient-to-t from-black/70 to-transparent rounded-lg"></div>
-                        <h3 class="absolute bottom-10 left-10 text-2xl font-bold text-white">Kết nối</h3>
+                        <h3 class="absolute bottom-10 left-10 text-2xl font-bold text-white">Tài Năng Tỏa Sáng</h3>
                     </a>
                 </div>
             </div>
@@ -226,6 +239,20 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // SCRIPT ĐIỀU CHỈNH CHIỀU CAO CHO HERO SECTION
+            const header = document.getElementById('header');
+            const heroSection = document.getElementById('hero-section');
+
+            const adjustHeroHeight = () => {
+                if (header && heroSection) {
+                    const headerHeight = header.offsetHeight;
+                    heroSection.style.minHeight = `calc(100vh - ${headerHeight}px)`;
+                }
+            };
+
+            adjustHeroHeight(); // Chạy khi tải trang
+            window.addEventListener('resize', adjustHeroHeight); // Chạy lại khi thay đổi kích thước cửa sổ
+            
             // SCROLL ANIMATE
             const animatedElements = document.querySelectorAll('.scroll-animate');
             const observer = new IntersectionObserver((entries) => {
@@ -250,7 +277,7 @@
                 });
             }
 
-            // --- ROBUST SCRIPT FOR MOBILE MENU ---
+            // SCRIPT FOR MOBILE MENU
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -276,7 +303,6 @@
             
             mobileMenuCloseButton.addEventListener('click', closeMenu);
             mobileMenuBackdrop.addEventListener('click', closeMenu);
-            // --- END OF SCRIPT ---
         });
     </script>
 </body>
