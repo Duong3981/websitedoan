@@ -9,77 +9,55 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f8fafc; }
+        html, body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+        }
         .nav-active { color: #2563eb; font-weight: 700; }
-        
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.75); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px); 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-        }
-        .scroll-animate { 
-            opacity: 0; 
-            transform: translateY(30px) scale(0.95); 
-            transition: opacity 0.7s ease-out, transform 0.7s ease-out; 
-        }
-        .scroll-animate.is-visible { 
-            opacity: 1; 
-            transform: translateY(0) scale(1); 
-        }
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .deco-shape { 
-            position: absolute; 
-            z-index: 5; /* Nằm trên blob */
-            animation: float 10s ease-in-out infinite; 
-        }
-
-        /* --- NEW: Decorative Blobs for Background --- */
-        .background-blob {
-            position: absolute;
-            opacity: 0.5;
-            filter: blur(100px); /* Creates the soft, blurry edge */
-            z-index: 0; /* Nằm dưới cùng */
-        }
-        /* --- END OF NEW STYLES --- */
-
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .scroll-animate { opacity: 0; transform: translateY(30px) scale(0.95); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+        .scroll-animate.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        .deco-shape { position: absolute; z-index: 5; animation: float 10s ease-in-out infinite; }
+        .background-blob { position: absolute; opacity: 0.5; filter: blur(100px); z-index: 0; }
         .member-card, .personnel-card { transition: all 0.3s ease-in-out; cursor: pointer; }
-        .member-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); 
-        }
-        .personnel-card:hover { 
-            transform: scale(1.05); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-        }
+        .member-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        .personnel-card:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .department-section + .department-section { border-top: 1px solid rgba(229, 231, 235, 0.7); }
-
-        /* Modal Styles */
         .modal { visibility: hidden; opacity: 0; transition: visibility 0s 0.3s, opacity 0.3s ease; }
         .modal.is-open { visibility: visible; opacity: 1; transition: visibility 0s, opacity 0.3s ease; }
         .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
         .modal.is-open .modal-content { transform: scale(1); }
+        #mobile-menu { visibility: hidden; transition: visibility 0.3s; }
+        #mobile-menu.is-open { visibility: visible; }
+        #mobile-menu-panel { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        #mobile-menu.is-open #mobile-menu-panel { transform: translateX(0); }
+        #mobile-menu-backdrop { opacity: 0; transition: opacity 0.3s ease-in-out; }
+        #mobile-menu.is-open #mobile-menu-backdrop { opacity: 1; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
     
     <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center space-x-3 z-20">
                 <svg class="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"/><path d="M9.75 16.125L15.375 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.25C12.4142 8.25 12.75 7.91421 12.75 7.5C12.75 7.08579 12.4142 6.75 12 6.75C11.5858 6.75 11.25 7.08579 11.25 7.5C11.25 7.91421 11.5858 8.25 12 8.25Z" fill="currentColor"/><path d="M12 18C12.4142 18 12.75 17.6642 12.75 17.25C12.75 16.8358 12.4142 16.5 12 16.5C11.5858 16.5 11.25 16.8358 11.25 17.25C11.25 17.6642 11.5858 18 12 18Z" fill="currentColor"/></svg>
                 <span class="text-xl font-extrabold text-gray-800 tracking-tight">ĐOÀN TRƯỜNG UEL</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8" id="main-nav"><a href="gioithieu.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Giới thiệu</a><a href="tochuc.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Tổ chức</a><a href="hoat-dong.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Hoạt động</a><a href="quy-trinh.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Quy trình</a><a href="https://www.facebook.com/youth.uel" target="_blank" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Liên hệ</a></nav>
-            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30">Đăng ký</a>
+            <div class="flex items-center gap-4">
+                <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="hidden sm:block bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30">Đăng ký</a>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none z-20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
         </div>
     </header>
 
     <main class="flex-grow">
-        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
+        <section class="relative overflow-hidden pt-16 pb-20 md:pt-20 md:pb-24 bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
             <div class="background-blob w-96 h-96 bg-purple-300 rounded-full top-0 -left-40"></div>
             <div class="background-blob w-96 h-96 bg-sky-300 rounded-full bottom-0 -right-40"></div>
             <div class="deco-shape w-20 h-20 rounded-full bg-pink-300/80 bottom-20 left-1/4"></div>
@@ -125,8 +103,8 @@
                         <p class="text-sm text-blue-600 font-semibold">UV BTV, Chủ tịch HSV</p>
                     </button>
                      <button data-modal-target="#modal-tran-le-trong-van" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
-                        <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lê Trọng Văn" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
-                        <h3 class="font-bold text-slate-800">Đ/c Trần Lê Trọng Văn</h3>
+                        <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lễ Trọng Văn" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
+                        <h3 class="font-bold text-slate-800">Đ/c Trần Lễ Trọng Văn</h3>
                         <p class="text-sm text-blue-600 font-semibold">Ủy viên Ban Thường vụ</p>
                     </button>
                      <button data-modal-target="#modal-tran-thi-thu-nguyet" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
@@ -181,7 +159,7 @@
                             <button data-modal-target="#modal-lam-hoa-nhi" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
-                                    <p class="font-bold text-slate-700">Đ/c Lâm Hoa Nhi</p>
+                                    <p class="font-bold text-slate-700">Đ/c Lâm Hòa Nhi</p>
                                     <p class="text-sm text-slate-500">Phó Chánh Văn phòng</p>
                                 </div>
                             </button>
@@ -227,7 +205,7 @@
                             <button data-modal-target="#modal-tran-le-trong-van" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
-                                    <p class="font-bold text-slate-700">Đ/c Trần Lê Trọng Văn</p>
+                                    <p class="font-bold text-slate-700">Đ/c Trần Lễ Trọng Văn</p>
                                     <p class="text-sm text-slate-500">Trưởng bộ phận</p>
                                 </div>
                             </button>
@@ -312,9 +290,7 @@
             </div>
         </section>
 
-        <section class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
-            <div class="deco-shape w-64 h-64 bg-white/10 rounded-full -top-20 -left-20"></div>
-            <div class="deco-shape w-80 h-80 bg-white/10 rounded-full -bottom-32 -right-20" style="animation-delay: -3s;"></div>
+        <section class="relative bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
             <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
                 <h2 class="text-3xl font-bold">Sẵn Sàng Đồng Hành Cùng Đội Ngũ Tinh Nhuệ?</h2>
                 <p class="max-w-xl mx-auto mt-3 text-purple-200">Hãy là mảnh ghép tiếp theo, cùng chúng mình tạo nên một nhiệm kỳ thành công và đáng nhớ.</p>
@@ -370,11 +346,11 @@
     <div id="modal-tran-le-trong-van" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
         <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
             <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
-            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lê Trọng Văn" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
-            <h3 class="text-2xl font-bold text-slate-800">Đ/c Trần Lê Trọng Văn</h3>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lễ Trọng Văn" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Trần Lễ Trọng Văn</h3>
             <p class="text-md text-blue-600 font-semibold mb-4">Ủy viên Ban Thường vụ</p>
             <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Tư tưởng vững vàng, hành động quyết liệt."</blockquote>
-            <div class="text-slate-700 text-left space-y-2"><p>Là Ủy viên Ban Thường vụ và Trưởng Bộ phận Tuyên giáo, đồng chí Trần Lê Trọng Văn chịu trách nhiệm về công tác chính trị - tư tưởng, giáo dục lý tưởng cách mạng, đạo đức lối sống cho đoàn viên, thanh niên. Đồng chí tổ chức các hoạt động tuyên truyền, các đợt sinh hoạt chính trị quan trọng trong năm.</p></div>
+            <div class="text-slate-700 text-left space-y-2"><p>Là Ủy viên Ban Thường vụ và Trưởng Bộ phận Tuyên giáo, đồng chí Trần Lễ Trọng Văn chịu trách nhiệm về công tác chính trị - tư tưởng, giáo dục lý tưởng cách mạng, đạo đức lối sống cho đoàn viên, thanh niên. Đồng chí tổ chức các hoạt động tuyên truyền, các đợt sinh hoạt chính trị quan trọng trong năm.</p></div>
         </div>
     </div>
     <div id="modal-tran-thi-thu-nguyet" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
@@ -431,10 +407,10 @@
         <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
             <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
             <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
-            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lâm Hoa Nhi</h3>
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lâm Hòa Nhi</h3>
             <p class="text-md text-slate-500 font-semibold mb-4">Phó Chánh Văn phòng</p>
             <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Luôn sẵn sàng hỗ trợ để cỗ máy chung vận hành không ngừng nghỉ."</blockquote>
-            <div class="text-slate-700 text-left space-y-2"><p>Là người hỗ trợ đắc lực cho Chánh Văn phòng, đồng chí Lâm Hoa Nhi tham gia vào việc điều phối công việc, quản lý các đội ngũ cộng tác viên và đảm bảo công tác hậu cần, chuẩn bị cho các chương trình luôn được chu toàn.</p></div>
+            <div class="text-slate-700 text-left space-y-2"><p>Là người hỗ trợ đắc lực cho Chánh Văn phòng, đồng chí Lâm Hòa Nhi tham gia vào việc điều phối công việc, quản lý các đội ngũ cộng tác viên và đảm bảo công tác hậu cần, chuẩn bị cho các chương trình luôn được chu toàn.</p></div>
         </div>
     </div>
     <div id="modal-huynh-nhu-y" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
@@ -487,6 +463,25 @@
             <div class="text-slate-700 text-left space-y-2"><p>Chuyên về mảng kỹ thuật và media, đồng chí Lê Nguyễn Trúc Quỳnh chỉ đạo đội ngũ ghi hình, thiết kế, dựng phim để tạo ra những sản phẩm truyền thông chất lượng cao, ghi lại những dấu ấn đáng nhớ của các hoạt động và góp phần xây dựng thương hiệu Tuổi trẻ UEL.</p></div>
         </div>
     </div>
+
+    <div id="mobile-menu" class="fixed inset-0 z-40 md:hidden">
+        <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60"></div>
+        <div id="mobile-menu-panel" class="relative z-50 bg-white w-4/5 max-w-sm h-full ml-auto p-6 shadow-xl flex flex-col">
+            <div class="flex justify-end items-center mb-8">
+                 <button id="mobile-menu-close-button" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 </button>
+            </div>
+            <nav class="flex flex-col space-y-4 text-lg">
+                <a href="gioithieu.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Giới thiệu</a>
+                <a href="tochuc.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Tổ chức</a>
+                <a href="hoat-dong.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Hoạt động</a>
+                <a href="quy-trinh.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Quy trình</a>
+                <a href="https://www.facebook.com/youth.uel" target="_blank" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Liên hệ</a>
+            </nav>
+            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="w-full mt-auto text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-all duration-300">Đăng ký Ngay</a>
+        </div>
+    </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -510,25 +505,22 @@
                     const modal = document.querySelector(targetId);
                     if (modal) {
                         modal.classList.add('is-open');
-                        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                        document.body.style.overflow = 'hidden';
                     }
                 });
             });
-
             const closeModal = (modal) => {
                 if(modal) {
                     modal.classList.remove('is-open');
-                    document.body.style.overflow = ''; // Restore background scrolling
+                    document.body.style.overflow = '';
                 }
             };
-
             const modalCloses = document.querySelectorAll('.modal-close');
             modalCloses.forEach(closeBtn => {
                 closeBtn.addEventListener('click', () => {
                     closeModal(closeBtn.closest('.modal'));
                 });
             });
-
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) {
@@ -536,7 +528,6 @@
                     }
                 });
             });
-
             document.addEventListener('keydown', (e) => {
                 if (e.key === "Escape") {
                     const openModal = document.querySelector('.modal.is-open');
@@ -554,6 +545,29 @@
                     link.classList.add('nav-active');
                 }
             });
+
+            // ROBUST SCRIPT FOR MOBILE MENU
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+            const openMenu = () => {
+                mobileMenu.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            };
+            const closeMenu = () => {
+                mobileMenu.classList.remove('is-open');
+                document.body.style.overflow = '';
+            };
+            mobileMenuButton.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('is-open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            mobileMenuCloseButton.addEventListener('click', closeMenu);
+            mobileMenuBackdrop.addEventListener('click', closeMenu);
         });
     </script>
 </body>

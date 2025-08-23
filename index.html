@@ -9,7 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        html, body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            width: 100%;
+            /* Dòng lệnh overflow-x: hidden; đã được gỡ bỏ khỏi đây để sửa lỗi sticky header */
+        }
         .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .gradient-text { background: linear-gradient(90deg, #38bdf8, #a78bfa, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .cta-button { box-shadow: 0px 5px 20px rgba(59, 130, 246, 0.4); transition: all 0.3s ease-in-out; }
@@ -26,6 +30,29 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
         .deco-shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
+
+        /* --- CSS FOR ROBUST MOBILE MENU --- */
+        #mobile-menu {
+            visibility: hidden;
+            transition: visibility 0.3s;
+        }
+        #mobile-menu.is-open {
+            visibility: visible;
+        }
+        #mobile-menu-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        #mobile-menu.is-open #mobile-menu-panel {
+            transform: translateX(0);
+        }
+        #mobile-menu-backdrop {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #mobile-menu.is-open #mobile-menu-backdrop {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -44,28 +71,6 @@
                 <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none z-20">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="fixed inset-0 z-40 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
-            <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60"></div>
-            <div class="relative z-50 w-4/5 max-w-sm h-full ml-auto">
-                 <div class="h-full p-6 shadow-xl flex flex-col" style="background: white !important; backdrop-filter: none !important;">
-                    <div class="flex justify-between items-center mb-8">
-                         <span class="text-xl font-extrabold text-gray-800 tracking-tight">MENU</span>
-                         <button id="mobile-menu-close-button" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                         </button>
-                    </div>
-                    <nav class="flex flex-col space-y-4 text-lg">
-                        <a href="gioithieu.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Giới thiệu</a>
-                        <a href="tochuc.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Tổ chức</a>
-                        <a href="hoat-dong.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Hoạt động</a>
-                        <a href="quy-trinh.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Quy trình</a>
-                        <a href="https://www.facebook.com/youth.uel" target="_blank" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Liên hệ</a>
-                    </nav>
-                    <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="w-full mt-auto text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-all duration-300">Đăng ký Ngay</a>
-                </div>
             </div>
         </div>
     </header>
@@ -192,6 +197,25 @@
             </div>
         </section>
     </main>
+
+    <div id="mobile-menu" class="fixed inset-0 z-40 md:hidden">
+        <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60"></div>
+        <div id="mobile-menu-panel" class="relative z-50 bg-white w-4/5 max-w-sm h-full ml-auto p-6 shadow-xl flex flex-col">
+            <div class="flex justify-end items-center mb-8">
+                 <button id="mobile-menu-close-button" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 </button>
+            </div>
+            <nav class="flex flex-col space-y-4 text-lg">
+                <a href="gioithieu.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Giới thiệu</a>
+                <a href="tochuc.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Tổ chức</a>
+                <a href="hoat-dong.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Hoạt động</a>
+                <a href="quy-trinh.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Quy trình</a>
+                <a href="https://www.facebook.com/youth.uel" target="_blank" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Liên hệ</a>
+            </nav>
+            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="w-full mt-auto text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-all duration-300">Đăng ký Ngay</a>
+        </div>
+    </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -211,7 +235,6 @@
             const navLinks = document.querySelectorAll('.nav-link');
             const currentPath = window.location.pathname.split('/').pop();
             if (currentPath === 'index.html' || currentPath === '') {
-                // Trang chủ không có link trong nav chính để active
             } else {
                  navLinks.forEach(link => {
                     if (link.getAttribute('href') === currentPath) {
@@ -220,23 +243,30 @@
                 });
             }
 
-            // --- SCRIPT FOR MOBILE MENU ---
+            // --- ROBUST SCRIPT FOR MOBILE MENU ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
 
             const openMenu = () => {
-                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
             };
 
             const closeMenu = () => {
-                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('is-open');
                 document.body.style.overflow = '';
             };
 
-            mobileMenuButton.addEventListener('click', openMenu);
+            mobileMenuButton.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('is-open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
             mobileMenuCloseButton.addEventListener('click', closeMenu);
             mobileMenuBackdrop.addEventListener('click', closeMenu);
             // --- END OF SCRIPT ---

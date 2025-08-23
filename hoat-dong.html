@@ -10,7 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        html, body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            width: 100%;
+        }
         .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .category-card { transition: all 0.3s ease-in-out; }
         .category-card:hover { transform: translateY(-10px) rotate(-2deg); box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.2); }
@@ -22,28 +25,39 @@
         @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0px) rotate(0deg); } }
         .deco-shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
 
-        /* Modal Styles */
         .modal { visibility: hidden; opacity: 0; transition: visibility 0s 0.3s, opacity 0.3s ease; }
         .modal.is-open { visibility: visible; opacity: 1; transition: visibility 0s, opacity 0.3s ease; }
         .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
         .modal.is-open .modal-content { transform: scale(1); }
+
+        #mobile-menu { visibility: hidden; transition: visibility 0.3s; }
+        #mobile-menu.is-open { visibility: visible; }
+        #mobile-menu-panel { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        #mobile-menu.is-open #mobile-menu-panel { transform: translateX(0); }
+        #mobile-menu-backdrop { opacity: 0; transition: opacity 0.3s ease-in-out; }
+        #mobile-menu.is-open #mobile-menu-backdrop { opacity: 1; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-slate-50">
     
     <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center space-x-3 z-20">
                 <svg class="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"/><path d="M9.75 16.125L15.375 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8.25C12.4142 8.25 12.75 7.91421 12.75 7.5C12.75 7.08579 12.4142 6.75 12 6.75C11.5858 6.75 11.25 7.08579 11.25 7.5C11.25 7.91421 11.5858 8.25 12 8.25Z" fill="currentColor"/><path d="M12 18C12.4142 18 12.75 17.6642 12.75 17.25C12.75 16.8358 12.4142 16.5 12 16.5C11.5858 16.5 11.25 16.8358 11.25 17.25C11.25 17.6642 11.5858 18 12 18Z" fill="currentColor"/></svg>
                 <span class="text-xl font-extrabold text-gray-800 tracking-tight">ĐOÀN TRƯỜNG UEL</span>
             </a>
             <nav class="hidden md:flex items-center space-x-8" id="main-nav"><a href="gioithieu.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Giới thiệu</a><a href="tochuc.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Tổ chức</a><a href="hoat-dong.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Hoạt động</a><a href="quy-trinh.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Quy trình</a><a href="https://www.facebook.com/youth.uel" target="_blank" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Liên hệ</a></nav>
-            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30">Đăng ký</a>
+            <div class="flex items-center gap-4">
+                <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="hidden sm:block bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30">Đăng ký</a>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none z-20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
         </div>
     </header>
 
     <main class="flex-grow">
-        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-tr from-rose-100 to-amber-100">
+        <section class="relative overflow-hidden pt-16 pb-20 md:pt-20 md:pb-24 bg-gradient-to-tr from-rose-100 to-amber-100">
              <div class="deco-shape w-40 h-40 rounded-full bg-rose-200/80 top-10 right-20"></div>
              <div class="deco-shape w-32 h-32 rounded-full bg-amber-200/80 bottom-10 left-20" style="animation-delay: -2s;"></div>
             <div class="container mx-auto px-6 text-center relative z-10">
@@ -338,6 +352,25 @@
         </div>
     </div>
 
+    <div id="mobile-menu" class="fixed inset-0 z-40 md:hidden">
+        <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60"></div>
+        <div id="mobile-menu-panel" class="relative z-50 bg-white w-4/5 max-w-sm h-full ml-auto p-6 shadow-xl flex flex-col">
+            <div class="flex justify-end items-center mb-8">
+                 <button id="mobile-menu-close-button" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                 </button>
+            </div>
+            <nav class="flex flex-col space-y-4 text-lg">
+                <a href="gioithieu.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Giới thiệu</a>
+                <a href="tochuc.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Tổ chức</a>
+                <a href="hoat-dong.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Hoạt động</a>
+                <a href="quy-trinh.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Quy trình</a>
+                <a href="https://www.facebook.com/youth.uel" target="_blank" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Liên hệ</a>
+            </nav>
+            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="w-full mt-auto text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-all duration-300">Đăng ký Ngay</a>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -370,14 +403,16 @@
                     const modal = document.querySelector(targetId);
                     if (modal) {
                         modal.classList.add('is-open');
-                        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                        document.body.style.overflow = 'hidden';
                     }
                 });
             });
 
             const closeModal = (modal) => {
-                modal.classList.remove('is-open');
-                document.body.style.overflow = ''; // Restore background scrolling
+                if (modal) {
+                    modal.classList.remove('is-open');
+                    document.body.style.overflow = '';
+                }
             };
 
             const modalCloses = document.querySelectorAll('.modal-close');
@@ -436,6 +471,33 @@
                     link.classList.add('nav-active');
                 }
             });
+
+            // ROBUST SCRIPT FOR MOBILE MENU
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+
+            const openMenu = () => {
+                mobileMenu.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeMenu = () => {
+                mobileMenu.classList.remove('is-open');
+                document.body.style.overflow = '';
+            };
+
+            mobileMenuButton.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('is-open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            mobileMenuCloseButton.addEventListener('click', closeMenu);
+            mobileMenuBackdrop.addEventListener('click', closeMenu);
         });
     </script>
 </body>
