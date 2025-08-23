@@ -29,7 +29,33 @@
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
-        .deco-shape { position: absolute; z-index: 0; animation: float 8s ease-in-out infinite; }
+        .deco-shape { position: absolute; z-index: 1; animation: float 8s ease-in-out infinite; }
+        
+        /* --- NEW DECORATIVE STYLES --- */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .background-blob {
+            position: absolute;
+            opacity: 0.6;
+            filter: blur(100px);
+            z-index: 0;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px; /* Adjust as needed */
+        }
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+        /* --- END OF NEW STYLES --- */
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -46,9 +72,9 @@
     </header>
 
     <main class="flex-grow">
-        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-tr from-teal-100 via-sky-100 to-indigo-100">
-            <div class="deco-shape w-40 h-40 rounded-full bg-teal-200/80 top-10 left-20"></div>
-            <div class="deco-shape w-32 h-32 rounded-full bg-indigo-200/80 bottom-10 right-20" style="animation-delay: -2s;"></div>
+        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-tr from-teal-100 via-sky-100 to-indigo-200">
+            <div class="background-blob w-96 h-96 bg-sky-300 rounded-full -top-20 -left-40"></div>
+            <div class="background-blob w-96 h-96 bg-indigo-300 rounded-full -bottom-20 -right-40"></div>
             <div class="container mx-auto px-6 text-center relative z-10">
                 <div class="scroll-animate">
                     <p class="text-sm font-semibold text-blue-600 uppercase tracking-widest">Lộ Trình Tuyển Chọn</p>
@@ -58,19 +84,21 @@
             </div>
         </section>
         
-        <section class="py-20 md:py-28 bg-white">
-            <div class="container mx-auto px-6">
+        <section class="relative overflow-hidden py-20 md:py-28 bg-gradient-to-br from-slate-50 to-gray-100">
+            <div class="background-blob w-96 h-96 bg-rose-200 rounded-full top-1/2 -translate-y-1/2 -left-60"></div>
+            <div class="background-blob w-96 h-96 bg-purple-200 rounded-full top-1/2 -translate-y-1/2 -right-60"></div>
+            <div class="container mx-auto px-6 relative z-10">
                 <div class="relative max-w-4xl mx-auto">
                     <div class="absolute left-4 md:left-1/2 top-0 h-full w-1 bg-gray-200 rounded-full"></div>
 
                     <div class="timeline-item-container scroll-animate relative md:flex md:justify-end md:mr-auto mb-16">
                         <div class="md:w-1/2 md:pr-12">
-                             <div class="timeline-card bg-slate-50 p-6 lg:p-8 rounded-2xl shadow-lg border border-gray-100">
-                                <p class="text-sm font-semibold text-blue-600">VÒNG 01</p>
-                                <h3 class="text-2xl font-bold text-slate-800 my-2">Điền biểu mẫu đăng ký</h3>
+                             <div class="timeline-card glass-card p-6 lg:p-8 rounded-2xl shadow-lg">
+                                <p class="text-sm font-semibold text-blue-600">VÒNG 01: DẤU ẤN CÁ NHÂN</p>
+                                <h3 class="text-2xl font-bold text-slate-800 my-2">Vòng Đơn Đăng Ký</h3>
                                 <div class="space-y-4 text-slate-600 mt-4">
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Hình thức:</strong> Trực tuyến qua Google Form.</p></div>
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> 20/8 - 14/9/2025.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></div><p>Đây là bước đầu tiên để chúng mình biết đến bạn. Hãy thể hiện màu sắc riêng, nguyện vọng và những mong muốn của bạn một cách chân thành nhất qua form đăng ký online.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> 20/8 - 14/9/2025.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -79,12 +107,12 @@
                     
                     <div class="timeline-item-container scroll-animate relative md:flex md:justify-start md:ml-auto mb-16">
                          <div class="md:w-1/2 md:pl-12">
-                             <div class="timeline-card bg-slate-50 p-6 lg:p-8 rounded-2xl shadow-lg border border-gray-100">
-                                <p class="text-sm font-semibold text-purple-600">VÒNG 02</p>
-                                <h3 class="text-2xl font-bold text-slate-800 my-2">Phỏng vấn trực tiếp</h3>
+                             <div class="timeline-card glass-card p-6 lg:p-8 rounded-2xl shadow-lg">
+                                <p class="text-sm font-semibold text-purple-600">VÒNG 02: KẾT NỐI & THẤU HIỂU</p>
+                                <h3 class="text-2xl font-bold text-slate-800 my-2">Vòng Phỏng Vấn</h3>
                                 <div class="space-y-4 text-slate-600 mt-4">
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.75.75 0 01-.318-1.464 3.5 3.5 0 016.652 0 .75.75 0 01-.318 1.464l-3.016-1.13A2.25 2.25 0 004.5 15.25v.75a.75.75 0 01-1.5 0v-.75a3.75 3.75 0 01-1.51-7.326zM18.51 15.326a.75.75 0 01-1.464-.318 3.5 3.5 0 00-6.652 0 .75.75 0 01-1.464.318l-1.13 3.016a.75.75 0 011.05 1.05l3.015-1.13a2.25 2.25 0 013.902 0l3.015 1.13a.75.75 0 011.05-1.05l-1.13-3.016z" /></svg></div><p><strong class="font-semibold">Hình thức:</strong> Trao đổi trực tiếp.</p></div>
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> Dự kiến 18/9/2025.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.75.75 0 01-.318-1.464 3.5 3.5 0 016.652 0 .75.75 0 01-.318 1.464l-3.016-1.13A2.25 2.25 0 004.5 15.25v.75a.75.75 0 01-1.5 0v-.75a3.75 3.75 0 01-1.51-7.326zM18.51 15.326a.75.75 0 01-1.464-.318 3.5 3.5 0 00-6.652 0 .75.75 0 01-1.464.318l-1.13 3.016a.75.75 0 011.05 1.05l3.015-1.13a2.25 2.25 0 013.902 0l3.015 1.13a.75.75 0 011.05-1.05l-1.13-3.016z" /></svg></div><p>Cơ hội để chúng ta trò chuyện và hiểu nhau hơn. Hãy tự tin chia sẻ về bản thân, kinh nghiệm và đặt những câu hỏi bạn quan tâm. Chúng mình tìm kiếm những cộng tác viên phù hợp về cả năng lực và tinh thần.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> Dự kiến 18/9/2025.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -93,12 +121,12 @@
 
                     <div class="timeline-item-container scroll-animate relative md:flex md:justify-end md:mr-auto">
                         <div class="md:w-1/2 md:pr-12">
-                            <div class="timeline-card bg-slate-50 p-6 lg:p-8 rounded-2xl shadow-lg border border-gray-100">
-                                <p class="text-sm font-semibold text-orange-600">VÒNG 03</p>
-                                <h3 class="text-2xl font-bold text-slate-800 my-2">Trải nghiệm thực tế</h3>
+                            <div class="timeline-card glass-card p-6 lg:p-8 rounded-2xl shadow-lg">
+                                <p class="text-sm font-semibold text-orange-600">VÒNG 03: HÒA NHỊP & CỐNG HIẾN</p>
+                                <h3 class="text-2xl font-bold text-slate-800 my-2">Vòng Trải Nghiệm</h3>
                                 <div class="space-y-4 text-slate-600 mt-4">
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.5 2a.5.5 0 00-.5.5v1.5H6a1 1 0 00-1 1v1a1 1 0 001 1h1.5V8a.5.5 0 001 0V6.5H10a1 1 0 001-1V4a1 1 0 00-1-1H8.5V2.5a.5.5 0 00-.5-.5h-1zM3 10a.5.5 0 01.5-.5h2.5a.5.5 0 010 1H4v5.5a.5.5 0 01-1 0V10zM12.5 10a.5.5 0 00-1 0v5.5a.5.5 0 001 0V10zM17 11.5a.5.5 0 01-.5.5h-2.5a.5.5 0 010-1H16V4.5a.5.5 0 011 0V11.5z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Hình thức:</strong> Tham gia hoạt động của các bộ phận.</p></div>
-                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> 22/9 – 03/10/2025.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /></svg></div><p>Bạn sẽ trở thành một "thành viên tập sự", cùng tham gia vào các công việc thực tế của Ban mà bạn đã chọn. Đây là giai đoạn để bạn thể hiện khả năng làm việc nhóm, sự sáng tạo và tinh thần trách nhiệm.</p></div>
+                                    <div class="flex items-start"><div class="flex-shrink-0 w-6 pt-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg></div><p><strong class="font-semibold">Thời gian:</strong> 22/9 – 03/10/2025.</p></div>
                                 </div>
                             </div>
                         </div>
@@ -108,33 +136,102 @@
             </div>
         </section>
 
-        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-tr from-amber-50 to-orange-100">
+        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-purple-100 via-pink-100 to-rose-200">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Các Vị Trí Rộng Mở Chào Đón Bạn</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Mỗi Ban là một gia đình nhỏ với những màu sắc riêng. Hãy xem nơi đâu phù hợp với bạn nhất!</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="scroll-animate glass-card p-8 rounded-2xl shadow-lg border-t-4 border-blue-400">
+                        <h3 class="text-xl font-bold text-slate-800">Ban Truyền Thông</h3>
+                        <p class="text-slate-600 mt-2">Nơi hội tụ của những tâm hồn sáng tạo, "phù phép" cho hình ảnh của Đoàn trường qua các ấn phẩm, video và bài viết. Phù hợp với các bạn yêu thích thiết kế, nhiếp ảnh, quay dựng, viết lách.</p>
+                    </div>
+                    <div class="scroll-animate glass-card p-8 rounded-2xl shadow-lg border-t-4 border-rose-400" style="transition-delay: 100ms;">
+                        <h3 class="text-xl font-bold text-slate-800">Ban Phong Trào</h3>
+                        <p class="text-slate-600 mt-2">"Trái tim" của các hoạt động, chuyên tổ chức các sự kiện, chiến dịch tình nguyện, sân chơi văn nghệ, thể thao. Dành cho những bạn năng động, nhiệt huyết, có khả năng tổ chức, kết nối.</p>
+                    </div>
+                    <div class="scroll-animate glass-card p-8 rounded-2xl shadow-lg border-t-4 border-teal-400" style="transition-delay: 200ms;">
+                        <h3 class="text-xl font-bold text-slate-800">Ban Tổ chức - Xây dựng Đoàn</h3>
+                        <p class="text-slate-600 mt-2">Là "xương sống" của tổ chức, phụ trách công tác nhân sự, quản lý đoàn viên, bồi dưỡng cán bộ Đoàn. Dành cho các bạn có tư duy logic, cẩn thận, yêu thích công việc mang tính hệ thống.</p>
+                    </div>
+                    <div class="scroll-animate glass-card p-8 rounded-2xl shadow-lg border-t-4 border-amber-400" style="transition-delay: 300ms;">
+                        <h3 class="text-xl font-bold text-slate-800">Ban Tuyên Giáo</h3>
+                        <p class="text-slate-600 mt-2">"Linh hồn" của Đoàn trường, thực hiện công tác giáo dục chính trị, tư tưởng, lan tỏa các giá trị tốt đẹp. Phù hợp với các bạn có kiến thức xã hội tốt, khả năng phân tích và truyền đạt.</p>
+                    </div>
+                    <div class="scroll-animate glass-card p-8 rounded-2xl shadow-lg border-t-4 border-sky-400" style="transition-delay: 400ms;">
+                        <h3 class="text-xl font-bold text-slate-800">Văn phòng Đoàn trường</h3>
+                        <p class="text-slate-600 mt-2">"Hậu phương" vững chắc, đảm bảo công tác hành chính, hậu cần, tài chính cho mọi hoạt động. Dành cho những bạn tỉ mỉ, có trách nhiệm, giỏi sắp xếp và quản lý công việc.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative overflow-hidden py-20 md:py-24 bg-slate-50">
+            <div class="container mx-auto px-6">
+                 <div class="text-center mb-12 scroll-animate">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Giải Đáp Thắc Mắc (FAQ)</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Những câu hỏi chúng mình thường gặp. Nếu bạn có thắc mắc khác, đừng ngần ngại liên hệ nhé!</p>
+                </div>
+                <div class="max-w-3xl mx-auto space-y-4 scroll-animate" style="transition-delay: 150ms;">
+                    <div class="faq-item bg-white rounded-lg shadow-sm">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-slate-800">
+                            <span>Em chưa có kinh nghiệm hoạt động Đoàn bao giờ, liệu có thể ứng tuyển không?</span>
+                            <svg class="faq-arrow w-5 h-5 text-slate-500 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-slate-600">
+                            <p>Hoàn toàn có thể! Chúng mình chào đón tất cả các bạn sinh viên có nhiệt huyết và mong muốn cống hiến. Kinh nghiệm là một lợi thế, nhưng tinh thần ham học hỏi và sự cam kết mới là điều quan trọng nhất. Bạn sẽ được đào tạo trong quá trình hoạt động.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white rounded-lg shadow-sm">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-slate-800">
+                            <span>Thời gian hoạt động có ảnh hưởng đến việc học không?</span>
+                            <svg class="faq-arrow w-5 h-5 text-slate-500 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-slate-600">
+                            <p>Đoàn trường luôn đặt việc học của sinh viên lên hàng đầu. Lịch hoạt động được sắp xếp linh hoạt, chủ yếu vào buổi tối hoặc cuối tuần. Quan trọng là bạn cần có kỹ năng quản lý thời gian tốt để cân bằng giữa việc học và hoạt động, và đây cũng là một kỹ năng quan trọng bạn sẽ rèn luyện được.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white rounded-lg shadow-sm">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5 font-semibold text-slate-800">
+                            <span>Tham gia Đoàn trường em sẽ nhận được những quyền lợi gì?</span>
+                            <svg class="faq-arrow w-5 h-5 text-slate-500 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                        </button>
+                        <div class="faq-answer px-5 pb-5 text-slate-600">
+                            <p>Bạn sẽ được phát triển toàn diện các kỹ năng mềm (lãnh đạo, làm việc nhóm, tổ chức sự kiện...), mở rộng mạng lưới quan hệ với bạn bè, anh chị và các chuyên gia, được ưu tiên trong các hoạt động của trường, và quan trọng nhất là có những kỷ niệm thanh xuân rực rỡ và ý nghĩa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative overflow-hidden bg-gradient-to-tr from-amber-50 to-orange-100 py-20 md:py-24">
             <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-12 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Checklist Cần Ghi Nhớ</h2>
-                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Đừng quên những cột mốc quan trọng này trên hành trình của bạn nhé!</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Một Vài Lời Khuyên Vàng Từ Chúng Mình</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Để hành trình của bạn suôn sẻ hơn, hãy ghi nhớ những điều này nhé!</p>
                 </div>
                 <div class="max-w-2xl mx-auto bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-lg border scroll-animate" style="transition-delay: 150ms;">
                     <ul class="space-y-4">
                         <li class="flex items-center pb-4 border-b">
                             <span class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</span>
                             <div class="ml-4">
-                                <p class="font-semibold text-slate-800">Nộp đơn đăng ký online</p>
-                                <p class="text-sm text-slate-500">Hạn chót: 23:59 ngày 14/09/2025</p>
+                                <p class="font-semibold text-slate-800">Hãy là chính mình</p>
+                                <p class="text-sm text-slate-500">Chúng mình trân trọng sự chân thành và màu sắc cá nhân của bạn.</p>
                             </div>
                         </li>
                         <li class="flex items-center pb-4 border-b">
                             <span class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold">2</span>
                             <div class="ml-4">
-                                <p class="font-semibold text-slate-800">Tham gia phỏng vấn</p>
-                                <p class="text-sm text-slate-500">Dự kiến: 18/09/2025</p>
+                                <p class="font-semibold text-slate-800">Tìm hiểu về chúng mình</p>
+                                <p class="text-sm text-slate-500">Việc hiểu rõ về tổ chức cho thấy sự nghiêm túc và tâm huyết của bạn.</p>
                             </div>
                         </li>
                          <li class="flex items-center">
                             <span class="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold">3</span>
                             <div class="ml-4">
-                                <p class="font-semibold text-slate-800">Bắt đầu giai đoạn trải nghiệm</p>
-                                <p class="text-sm text-slate-500">Từ 22/09 đến 03/10/2025</p>
+                                <p class="font-semibold text-slate-800">Chuẩn bị kỹ lưỡng</p>
+                                <p class="text-sm text-slate-500">Đọc kỹ các yêu cầu và chuẩn bị cho các câu hỏi phỏng vấn có thể gặp.</p>
                             </div>
                         </li>
                     </ul>
@@ -178,6 +275,22 @@
                 if (link.getAttribute('href') === currentPath) {
                     link.classList.add('nav-active');
                 }
+            });
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('open')) {
+                            otherItem.classList.remove('open');
+                        }
+                    });
+                    // Toggle current item
+                    item.classList.toggle('open');
+                });
             });
         });
     </script>

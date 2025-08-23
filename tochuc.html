@@ -11,13 +11,58 @@
     <style>
         body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f8fafc; }
         .nav-active { color: #2563eb; font-weight: 700; }
-        .scroll-animate { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .scroll-animate.is-visible { opacity: 1; transform: translateY(0); }
-        .member-card { transition: all 0.3s ease-in-out; }
-        .member-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
-        .personnel-card { transition: all 0.3s ease-in-out; }
-        .personnel-card:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .department-section + .department-section { border-top: 1px solid #e5e7eb; }
+        
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+        }
+        .scroll-animate { 
+            opacity: 0; 
+            transform: translateY(30px) scale(0.95); 
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out; 
+        }
+        .scroll-animate.is-visible { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .deco-shape { 
+            position: absolute; 
+            z-index: 5; /* Nằm trên blob */
+            animation: float 10s ease-in-out infinite; 
+        }
+
+        /* --- NEW: Decorative Blobs for Background --- */
+        .background-blob {
+            position: absolute;
+            opacity: 0.5;
+            filter: blur(100px); /* Creates the soft, blurry edge */
+            z-index: 0; /* Nằm dưới cùng */
+        }
+        /* --- END OF NEW STYLES --- */
+
+        .member-card, .personnel-card { transition: all 0.3s ease-in-out; cursor: pointer; }
+        .member-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); 
+        }
+        .personnel-card:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+        }
+        .department-section + .department-section { border-top: 1px solid rgba(229, 231, 235, 0.7); }
+
+        /* Modal Styles */
+        .modal { visibility: hidden; opacity: 0; transition: visibility 0s 0.3s, opacity 0.3s ease; }
+        .modal.is-open { visibility: visible; opacity: 1; transition: visibility 0s, opacity 0.3s ease; }
+        .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal.is-open .modal-content { transform: scale(1); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -34,8 +79,12 @@
     </header>
 
     <main class="flex-grow">
-        <section class="py-20 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
-            <div class="container mx-auto px-6 text-center">
+        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
+            <div class="background-blob w-96 h-96 bg-purple-300 rounded-full top-0 -left-40"></div>
+            <div class="background-blob w-96 h-96 bg-sky-300 rounded-full bottom-0 -right-40"></div>
+            <div class="deco-shape w-20 h-20 rounded-full bg-pink-300/80 bottom-20 left-1/4"></div>
+            <div class="deco-shape w-24 h-24 rounded-xl bg-white/80 top-20 right-1/4 rotate-45" style="animation-delay: -3s;"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
                 <div class="scroll-animate">
                     <p class="text-sm font-semibold text-blue-600 uppercase tracking-widest">Cơ Cấu Tổ Chức</p>
                     <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight mt-2">Gặp Gỡ Đội Ngũ Nòng Cốt</h1>
@@ -44,8 +93,10 @@
             </div>
         </section>
         
-        <section class="py-20 md:py-24 bg-white">
-            <div class="container mx-auto px-6">
+        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-rose-100 to-amber-100">
+            <div class="background-blob w-96 h-96 bg-rose-300 rounded-full top-0 -left-40"></div>
+            <div class="background-blob w-96 h-96 bg-amber-300 rounded-full bottom-0 -right-40" style="animation-delay: -3s;"></div>
+            <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-16 scroll-animate">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Ban Thường Vụ Đoàn Trường</h2>
                     <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">
@@ -53,52 +104,54 @@
                     </p>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 max-w-6xl mx-auto scroll-animate" style="transition-delay: 150ms;">
-                    <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    <button data-modal-target="#modal-huynh-manh-phuong" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Huỳnh Mạnh Phương" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Huỳnh Mạnh Phương</h3>
                         <p class="text-sm text-blue-600 font-semibold">Bí thư</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-che-thi-ngoc-tan" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Chế Thị Ngọc Tân" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Chế Thị Ngọc Tân</h3>
                         <p class="text-sm text-blue-600 font-semibold">Phó Bí thư, Chủ nhiệm UBKT</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-nguyen-thi-thao-trang" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Nguyễn Thị Thảo Trang" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Nguyễn Thị Thảo Trang</h3>
                         <p class="text-sm text-blue-600 font-semibold">Phó Bí thư</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-hoang-khanh-bao-quyen" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Hoàng Khánh Bảo Quyên" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Hoàng Khánh Bảo Quyên</h3>
                         <p class="text-sm text-blue-600 font-semibold">UV BTV, Chủ tịch HSV</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
-                        <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lễ Trọng Văn" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
-                        <h3 class="font-bold text-slate-800">Đ/c Trần Lễ Trọng Văn</h3>
+                    </button>
+                     <button data-modal-target="#modal-tran-le-trong-van" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
+                        <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lê Trọng Văn" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
+                        <h3 class="font-bold text-slate-800">Đ/c Trần Lê Trọng Văn</h3>
                         <p class="text-sm text-blue-600 font-semibold">Ủy viên Ban Thường vụ</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-tran-thi-thu-nguyet" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Thị Thu Nguyệt" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Trần Thị Thu Nguyệt</h3>
                         <p class="text-sm text-blue-600 font-semibold">Ủy viên Ban Thường vụ</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-bui-thuy-an" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Bùi Thùy An" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Bùi Thùy An</h3>
                         <p class="text-sm text-blue-600 font-semibold">Ủy viên Ban Thường vụ</p>
-                    </div>
-                     <div class="member-card text-center p-6 bg-slate-50 rounded-xl border">
+                    </button>
+                     <button data-modal-target="#modal-nguyen-tran-hieu-nhan-btv" class="modal-trigger member-card text-center p-6 glass-card rounded-2xl shadow-lg">
                         <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Nguyễn Trần Hiếu Nhân" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                         <h3 class="font-bold text-slate-800">Đ/c Nguyễn Trần Hiếu Nhân</h3>
                         <p class="text-sm text-blue-600 font-semibold">Ủy viên Ban Thường vụ</p>
-                    </div>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <section class="bg-slate-50 py-20 md:py-24">
-            <div class="container mx-auto px-6">
+        <section class="relative overflow-hidden bg-gradient-to-tr from-teal-100 to-cyan-200 py-20 md:py-24">
+            <div class="background-blob w-80 h-80 bg-teal-300 rounded-full top-1/2 -translate-y-1/2 -left-40"></div>
+            <div class="background-blob w-96 h-96 bg-cyan-300 rounded-full top-1/2 -translate-y-1/3 -right-52"></div>
+            <div class="container mx-auto px-6 relative z-10">
                 <div class="text-center mb-20 scroll-animate">
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Các Bộ Phận Chuyên Môn</h2>
                     <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Mỗi bộ phận là một mảnh ghép không thể thiếu, góp phần tạo nên bức tranh hoạt động đa sắc màu.</p>
@@ -111,27 +164,27 @@
                             <p class="text-slate-600 text-lg leading-relaxed">Là một phần vô cùng quan trọng, tham mưu cho Ban Thường vụ các nội dung như hậu cần, quản trị, văn thư, lưu trữ và phối hợp chỉ đạo.</p>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
-                             <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                             <button data-modal-target="#modal-nguyen-tran-hieu-nhan-vp" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Nguyễn Trần Hiếu Nhân</p>
                                     <p class="text-sm text-slate-500">Phụ trách BP</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            </button>
+                            <button data-modal-target="#modal-hoang-ngoc-anh" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Hoàng Ngọc Ánh</p>
                                     <p class="text-sm text-slate-500">Chánh Văn phòng</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 sm:col-span-2">
+                            </button>
+                            <button data-modal-target="#modal-lam-hoa-nhi" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
-                                    <p class="font-bold text-slate-700">Đ/c Lâm Hòa Nhi</p>
+                                    <p class="font-bold text-slate-700">Đ/c Lâm Hoa Nhi</p>
                                     <p class="text-sm text-slate-500">Phó Chánh Văn phòng</p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -141,27 +194,27 @@
                             <p class="text-slate-600 text-lg leading-relaxed">Tổ chức thực hiện các giải pháp nhằm lan tỏa các phong trào hành động cách mạng của Đoàn, tạo môi trường đồng hành giúp thanh niên phát triển toàn diện.</p>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            <button data-modal-target="#modal-huynh-manh-phuong" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Huỳnh Mạnh Phương</p>
                                     <p class="text-sm text-slate-500">Trưởng bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            </button>
+                            <button data-modal-target="#modal-hoang-khanh-bao-quyen" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Hoàng Khánh Bảo Quyên</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 sm:col-span-2">
+                            </button>
+                            <button data-modal-target="#modal-bui-thuy-an" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Bùi Thùy An</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
                     
@@ -171,27 +224,27 @@
                             <p class="text-slate-600 text-lg leading-relaxed">Thực hiện công tác tuyên truyền, giáo dục đoàn viên về chủ trương của Đảng, pháp luật Nhà nước; giáo dục truyền thống, lịch sử, chính trị - tư tưởng và đạo đức lối sống.</p>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            <button data-modal-target="#modal-tran-le-trong-van" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
-                                    <p class="font-bold text-slate-700">Đ/c Trần Lễ Trọng Văn</p>
+                                    <p class="font-bold text-slate-700">Đ/c Trần Lê Trọng Văn</p>
                                     <p class="text-sm text-slate-500">Trưởng bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            </button>
+                            <button data-modal-target="#modal-tran-thi-thu-nguyet" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Trần Thị Thu Nguyệt</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 sm:col-span-2">
+                            </button>
+                            <button data-modal-target="#modal-huynh-nhu-y" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Huỳnh Như Ý</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -201,27 +254,27 @@
                             <p class="text-slate-600 text-lg leading-relaxed">Tham mưu các hoạt động liên quan đến công tác cán bộ Đoàn, công tác đoàn viên, và công tác tổ chức cơ sở Đoàn, cùng các chương trình xây dựng tổ chức vững mạnh.</p>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
-                           <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                           <button data-modal-target="#modal-che-thi-ngoc-tan" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Chế Thị Ngọc Tân</p>
                                     <p class="text-sm text-slate-500">Trưởng bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            </button>
+                            <button data-modal-target="#modal-nguyen-anh-duy" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Nguyễn Anh Duy</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 sm:col-span-2">
+                            </button>
+                            <button data-modal-target="#modal-le-thi-hai-yen" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Lê Thị Hải Yến</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -231,27 +284,27 @@
                             <p class="text-slate-600 text-lg leading-relaxed">Là cầu nối thông tin, hình ảnh của Đoàn - Hội đến với sinh viên và đối tác. Phụ trách toàn bộ mảng media cho các sự kiện của Đoàn - Hội.</p>
                         </div>
                         <div class="grid sm:grid-cols-2 gap-6">
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            <button data-modal-target="#modal-nguyen-thi-thao-trang" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Nguyễn Thị Thảo Trang</p>
                                     <p class="text-sm text-slate-500">Trưởng bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4">
+                            </button>
+                            <button data-modal-target="#modal-le-nguyen-minh-chau" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Lê Nguyễn Minh Châu</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
-                            <div class="personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 sm:col-span-2">
+                            </button>
+                            <button data-modal-target="#modal-le-nguyen-truc-quynh" class="modal-trigger personnel-card glass-card p-4 rounded-2xl shadow-lg flex items-center gap-4 sm:col-span-2 text-left">
                                 <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
                                 <div>
                                     <p class="font-bold text-slate-700">Đ/c Lê Nguyễn Trúc Quỳnh</p>
                                     <p class="text-sm text-slate-500">Phó bộ phận</p>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
@@ -259,7 +312,9 @@
             </div>
         </section>
 
-        <section class="relative bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
+        <section class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
+            <div class="deco-shape w-64 h-64 bg-white/10 rounded-full -top-20 -left-20"></div>
+            <div class="deco-shape w-80 h-80 bg-white/10 rounded-full -bottom-32 -right-20" style="animation-delay: -3s;"></div>
             <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
                 <h2 class="text-3xl font-bold">Sẵn Sàng Đồng Hành Cùng Đội Ngũ Tinh Nhuệ?</h2>
                 <p class="max-w-xl mx-auto mt-3 text-purple-200">Hãy là mảnh ghép tiếp theo, cùng chúng mình tạo nên một nhiệm kỳ thành công và đáng nhớ.</p>
@@ -271,102 +326,168 @@
             </div>
         </section>
     </main>
+
+    <div id="modal-huynh-manh-phuong" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Huỳnh Mạnh Phương" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Huỳnh Mạnh Phương</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Bí thư</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Dẫn dắt bằng nhiệt huyết, kiến tạo bằng hành động. Tuổi trẻ UEL sẽ luôn là một tập thể tiên phong và bản lĩnh."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Với vai trò là người đứng đầu, đồng chí Huỳnh Mạnh Phương chịu trách nhiệm chỉ đạo chung mọi hoạt động của Đoàn trường, định hướng các chiến lược phát triển và là người đại diện cao nhất của tổ chức.</p><p>Đồng chí tập trung vào việc xây dựng một môi trường năng động, sáng tạo để mỗi đoàn viên có cơ hội phát triển toàn diện.</p></div>
+        </div>
+    </div>
+    <div id="modal-che-thi-ngoc-tan" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Chế Thị Ngọc Tân" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Chế Thị Ngọc Tân</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Phó Bí thư, Chủ nhiệm UBKT</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Kỷ luật tạo nên sức mạnh, minh bạch tạo dựng niềm tin."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Chế Thị Ngọc Tân phụ trách mảng công tác kiểm tra, giám sát, đảm bảo các hoạt động của Đoàn trường tuân thủ đúng điều lệ và quy định. Đồng thời, đồng chí cũng hỗ trợ Bí thư trong việc điều hành và quản lý các hoạt động chung, đặc biệt là công tác xây dựng Đoàn.</p></div>
+        </div>
+    </div>
+    <div id="modal-nguyen-thi-thao-trang" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Nguyễn Thị Thảo Trang" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Nguyễn Thị Thảo Trang</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Phó Bí thư</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Sáng tạo trong từng thông điệp, kết nối từng trái tim."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Là Phó Bí thư phụ trách mảng truyền thông, đồng chí Nguyễn Thị Thảo Trang có vai trò quan trọng trong việc xây dựng hình ảnh, lan tỏa thông tin và các giá trị của Đoàn trường đến với sinh viên. Đồng chí dẫn dắt Bộ phận Truyền thông, đảm bảo sự thành công về mặt hình ảnh cho mọi sự kiện.</p></div>
+        </div>
+    </div>
+    <div id="modal-hoang-khanh-bao-quyen" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Hoàng Khánh Bảo Quyên" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Hoàng Khánh Bảo Quyên</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">UV BTV, Chủ tịch HSV</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Vì một cộng đồng sinh viên đoàn kết, năng động và phát triển."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Với vai trò kép là Ủy viên Ban Thường vụ Đoàn trường và Chủ tịch Hội Sinh viên, đồng chí Hoàng Khánh Bảo Quyên là cầu nối quan trọng giữa hai tổ chức, đảm bảo sự phối hợp nhịp nhàng và hiệu quả trong các phong trào sinh viên, chăm lo đời sống vật chất và tinh thần cho hội viên, sinh viên.</p></div>
+        </div>
+    </div>
+    <div id="modal-tran-le-trong-van" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Lê Trọng Văn" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Trần Lê Trọng Văn</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Ủy viên Ban Thường vụ</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Tư tưởng vững vàng, hành động quyết liệt."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Là Ủy viên Ban Thường vụ và Trưởng Bộ phận Tuyên giáo, đồng chí Trần Lê Trọng Văn chịu trách nhiệm về công tác chính trị - tư tưởng, giáo dục lý tưởng cách mạng, đạo đức lối sống cho đoàn viên, thanh niên. Đồng chí tổ chức các hoạt động tuyên truyền, các đợt sinh hoạt chính trị quan trọng trong năm.</p></div>
+        </div>
+    </div>
+    <div id="modal-tran-thi-thu-nguyet" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Trần Thị Thu Nguyệt" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Trần Thị Thu Nguyệt</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Ủy viên Ban Thường vụ</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Mỗi thông điệp được trao đi là một giá trị được lan tỏa."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Trần Thị Thu Nguyệt là một thành viên chủ chốt trong Ban Thường vụ, hỗ trợ đắc lực cho công tác của Bộ phận Tuyên giáo. Đồng chí tham gia xây dựng nội dung, kế hoạch cho các hoạt động giáo dục, đảm bảo tính hiệu quả và sức lan tỏa của các chương trình.</p></div>
+        </div>
+    </div>
+    <div id="modal-bui-thuy-an" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Bùi Thùy An" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Bùi Thùy An</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Ủy viên Ban Thường vụ</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Sức trẻ và sự nhiệt huyết là động lực cho mọi phong trào."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Là một mảnh ghép quan trọng của Ban Thường vụ và Bộ phận Phong trào, đồng chí Bùi Thùy An đóng góp vào việc lên ý tưởng, tổ chức các sân chơi, hoạt động văn - thể - mỹ, tạo ra một môi trường sôi nổi để sinh viên rèn luyện thể chất và phát huy tài năng.</p></div>
+        </div>
+    </div>
+    <div id="modal-nguyen-tran-hieu-nhan-btv" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Nguyễn Trần Hiếu Nhân" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-800">Đ/c Nguyễn Trần Hiếu Nhân</h3>
+            <p class="text-md text-blue-600 font-semibold mb-4">Ủy viên Ban Thường vụ</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Hậu phương vững chắc cho tiền tuyến vững bước."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Với vai trò Ủy viên Ban Thường vụ và Phụ trách Bộ phận Văn phòng, đồng chí Nguyễn Trần Hiếu Nhân là người đảm bảo sự vận hành trơn tru của bộ máy Đoàn trường. Đồng chí quản lý công tác hậu cần, hành chính, tài chính và nhân sự, tạo điều kiện tốt nhất cho các bộ phận khác hoạt động hiệu quả.</p></div>
+        </div>
+    </div>
+    <div id="modal-nguyen-tran-hieu-nhan-vp" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Nguyễn Trần Hiếu Nhân</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phụ trách BP Văn phòng</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Hậu phương vững chắc cho tiền tuyến vững bước."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Là người chịu trách nhiệm cao nhất tại Bộ phận Văn phòng, đồng chí Nguyễn Trần Hiếu Nhân điều phối công tác hành chính, quản trị, nhân sự và hậu cần, đảm bảo mọi hoạt động của Đoàn trường được vận hành một cách chuyên nghiệp và hiệu quả.</p></div>
+        </div>
+    </div>
+    <div id="modal-hoang-ngoc-anh" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Hoàng Ngọc Ánh</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Chánh Văn phòng</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Sự tỉ mỉ và chu đáo trong từng công việc nhỏ tạo nên thành công lớn."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Hoàng Ngọc Ánh trực tiếp quản lý và thực thi các công việc của Văn phòng Đoàn trường, từ công tác văn thư, lưu trữ, quản lý cơ sở vật chất cho đến việc sắp xếp lịch trình, chuẩn bị cho các cuộc họp và sự kiện.</p></div>
+        </div>
+    </div>
+    <div id="modal-lam-hoa-nhi" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lâm Hoa Nhi</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó Chánh Văn phòng</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Luôn sẵn sàng hỗ trợ để cỗ máy chung vận hành không ngừng nghỉ."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Là người hỗ trợ đắc lực cho Chánh Văn phòng, đồng chí Lâm Hoa Nhi tham gia vào việc điều phối công việc, quản lý các đội ngũ cộng tác viên và đảm bảo công tác hậu cần, chuẩn bị cho các chương trình luôn được chu toàn.</p></div>
+        </div>
+    </div>
+    <div id="modal-huynh-nhu-y" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Huỳnh Như Ý</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó bộ phận Tuyên giáo</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Truyền cảm hứng và giáo dục qua những câu chuyện, những giá trị."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Huỳnh Như Ý cùng với các thành viên khác trong Bộ phận Tuyên giáo triển khai các hoạt động giáo dục chính trị, tư tưởng, xây dựng các sản phẩm tuyên truyền hiệu quả, góp phần nâng cao nhận thức và bản lĩnh chính trị cho đoàn viên.</p></div>
+        </div>
+    </div>
+    <div id="modal-nguyen-anh-duy" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Nguyễn Anh Duy</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó bộ phận Tổ chức - Xây dựng Đoàn</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Xây dựng nền móng vững chắc cho một tổ chức Đoàn lớn mạnh."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Nguyễn Anh Duy chịu trách nhiệm về công tác quản lý đoàn viên, phát triển các chi đoàn cơ sở, tổ chức các lớp tập huấn cán bộ Đoàn và triển khai các chương trình rèn luyện đoàn viên, đảm bảo chất lượng và sức mạnh của tổ chức từ gốc.</p></div>
+        </div>
+    </div>
+    <div id="modal-le-thi-hai-yen" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lê Thị Hải Yến</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó bộ phận Tổ chức - Xây dựng Đoàn</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Mỗi cán bộ Đoàn là một hạt nhân, mỗi chi đoàn là một pháo đài."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Đồng chí Lê Thị Hải Yến hỗ trợ Trưởng bộ phận trong việc theo dõi, đánh giá chất lượng hoạt động của các cơ sở Đoàn, tham mưu công tác nhân sự và phát triển đội ngũ cán bộ Đoàn kế cận, đảm bảo tính kế thừa và phát triển bền vững của tổ chức.</p></div>
+        </div>
+    </div>
+    <div id="modal-le-nguyen-minh-chau" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lê Nguyễn Minh Châu</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó bộ phận Truyền thông</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Mỗi hình ảnh, mỗi con chữ đều mang một câu chuyện và sứ mệnh riêng."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Phụ trách mảng nội dung và hình ảnh, đồng chí Lê Nguyễn Minh Châu định hướng sáng tạo cho các sản phẩm truyền thông, quản lý các kênh thông tin chính thức của Đoàn trường và đảm bảo mọi thông điệp đều được truyền tải một cách chính xác, hấp dẫn và hiệu quả.</p></div>
+        </div>
+    </div>
+    <div id="modal-le-nguyen-truc-quynh" class="modal fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+        <div class="modal-content bg-slate-50 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-8 relative text-center">
+            <button class="modal-close absolute top-4 right-4 bg-white/80 w-8 h-8 rounded-full hover:bg-white transition-colors z-10 font-bold text-xl">&times;</button>
+            <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg ring-4 ring-white">
+            <h3 class="text-2xl font-bold text-slate-700">Đ/c Lê Nguyễn Trúc Quỳnh</h3>
+            <p class="text-md text-slate-500 font-semibold mb-4">Phó bộ phận Truyền thông</p>
+            <blockquote class="text-slate-600 italic border-l-4 border-blue-200 pl-4 my-6 text-left">"Bắt trọn từng khoảnh khắc, lan tỏa từng cảm xúc."</blockquote>
+            <div class="text-slate-700 text-left space-y-2"><p>Chuyên về mảng kỹ thuật và media, đồng chí Lê Nguyễn Trúc Quỳnh chỉ đạo đội ngũ ghi hình, thiết kế, dựng phim để tạo ra những sản phẩm truyền thông chất lượng cao, ghi lại những dấu ấn đáng nhớ của các hoạt động và góp phần xây dựng thương hiệu Tuổi trẻ UEL.</p></div>
+        </div>
+    </div>
     
-   <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cơ Cấu Tổ Chức | Đoàn trường ĐH Kinh tế - Luật</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f8fafc; }
-        .nav-active { color: #2563eb; font-weight: 700; }
-        .scroll-animate { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .scroll-animate.is-visible { opacity: 1; transform: translateY(0); }
-        .member-card, .personnel-card { transition: all 0.3s ease-in-out; cursor: pointer; }
-        .member-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
-        .personnel-card:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .department-section + .department-section { border-top: 1px solid #e5e7eb; }
-
-        /* Modal Styles */
-        .modal { visibility: hidden; opacity: 0; transition: visibility 0s 0.3s, opacity 0.3s ease; }
-        .modal.is-open { visibility: visible; opacity: 1; transition: visibility 0s, opacity 0.3s ease; }
-        .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
-        .modal.is-open .modal-content { transform: scale(1); }
-    </style>
-</head>
-<body class="flex flex-col min-h-screen">
-    
-    <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
-        </header>
-
-    <main class="flex-grow">
-        <section class="py-20 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-100">
-            <div class="container mx-auto px-6 text-center">
-                <div class="scroll-animate">
-                    <p class="text-sm font-semibold text-blue-600 uppercase tracking-widest">Cơ Cấu Tổ Chức</p>
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight mt-2">Gặp Gỡ Đội Ngũ Nòng Cốt</h1>
-                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Những con người nhiệt huyết, sáng tạo, luôn sẵn sàng cháy hết mình vì phong trào sinh viên UEL.</p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="py-20 md:py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Ban Thường Vụ Đoàn Trường</h2>
-                    <p class="mt-4 text-lg text-gray-600 max-w-4xl mx-auto">
-                        Tập hợp 8 thành viên ưu tú nhất, là những người dẫn dắt, định hướng cho mọi hoạt động và phong trào của Đoàn Trường.
-                    </p>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 max-w-6xl mx-auto scroll-animate" style="transition-delay: 150ms;">
-                    <button data-modal-target="#modal-huynh-manh-phuong" class="modal-trigger member-card text-center p-6 bg-slate-50 rounded-xl border">
-                        <img src="https://placehold.co/128x128/e0f2fe/0284c7?text=Ảnh" alt="Ảnh Đ/c Huỳnh Mạnh Phương" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
-                        <h3 class="font-bold text-slate-800">Đ/c Huỳnh Mạnh Phương</h3>
-                        <p class="text-sm text-blue-600 font-semibold">Bí thư</p>
-                    </button>
-                    </div>
-            </div>
-        </section>
-
-        <section class="bg-slate-50 py-20 md:py-24">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-20 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Các Bộ Phận Chuyên Môn</h2>
-                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Mỗi bộ phận là một mảnh ghép không thể thiếu, góp phần tạo nên bức tranh hoạt động đa sắc màu.</p>
-                </div>
-
-                <div class="space-y-20">
-                    <div class="department-section grid md:grid-cols-2 gap-12 lg:gap-16 items-center scroll-animate">
-                        <div>
-                            <h3 class="text-3xl font-bold text-slate-800 mb-4 flex items-center gap-4"><span class="w-12 h-12 rounded-lg bg-sky-500 text-white flex items-center justify-center flex-shrink-0">VP</span>Bộ Phận Văn Phòng</h3>
-                            <p class="text-slate-600 text-lg leading-relaxed">Là một phần vô cùng quan trọng, tham mưu cho Ban Thường vụ các nội dung như hậu cần, quản trị, văn thư, lưu trữ và phối hợp chỉ đạo.</p>
-                        </div>
-                        <div class="grid sm:grid-cols-2 gap-6">
-                             <button data-modal-target="#modal-nguyen-tran-hieu-nhan" class="modal-trigger personnel-card bg-white p-4 rounded-xl shadow-md flex items-center gap-4 text-left">
-                                <img src="https://placehold.co/64x64/e2e8f0/64748b?text=Ảnh" alt="Ảnh nhân sự" class="w-16 h-16 rounded-full object-cover flex-shrink-0">
-                                <div>
-                                    <p class="font-bold text-slate-700">Đ/c Nguyễn Trần Hiếu Nhân</p>
-                                    <p class="text-sm text-slate-500">Phụ trách BP</p>
-                                </div>
-                            </button>
-                            </div>
-                    </div>
-
-                    </div>
-            </div>
-        
-        </section>
-
-        <section class="relative bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
-            </section>
-    </main>
-    
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // SCROLL ANIMATE
@@ -425,33 +546,6 @@
                 }
             });
 
-            // ACTIVE NAV LINK
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentPath = window.location.pathname.split('/').pop();
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('nav-active');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
-   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // SCROLL ANIMATE
-            const animatedElements = document.querySelectorAll('.scroll-animate');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            animatedElements.forEach(el => observer.observe(el));
-            
             // ACTIVE NAV LINK
             const navLinks = document.querySelectorAll('.nav-link');
             const currentPath = window.location.pathname.split('/').pop();
