@@ -1,336 +1,122 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giới Thiệu | Đoàn trường ĐH Kinh tế - Luật</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        html, body {
-            font-family: 'Be Vietnam Pro', sans-serif;
-            width: 100%;
-            /* overflow-x: hidden; Đã gỡ bỏ để sửa lỗi sticky header */
-            background-color: #f8fafc;
-        }
-        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .nav-active { color: #2563eb; font-weight: 700; }
-        .scroll-animate { opacity: 0; transform: translateY(30px) scale(0.95); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
-        .scroll-animate.is-visible { opacity: 1; transform: translateY(0) scale(1); }
-        .activity-tab { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .activity-tab.active { transform: translateY(-2px); box-shadow: 0 10px 25px -5px var(--tw-shadow-color); color: white; }
-        .activity-content { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .stat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px var(--tw-shadow-color-opacity-25); }
-        
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(15deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .deco-shape { position: absolute; z-index: 0; animation: float 10s ease-in-out infinite; }
-
-        #mobile-menu { visibility: hidden; transition: visibility 0.3s; }
-        #mobile-menu.is-open { visibility: visible; }
-        #mobile-menu-panel { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
-        #mobile-menu.is-open #mobile-menu-panel { transform: translateX(0); }
-        #mobile-menu-backdrop { opacity: 0; transition: opacity 0.3s ease-in-out; }
-        #mobile-menu.is-open #mobile-menu-backdrop { opacity: 1; }
-        
-        @keyframes gradient-pan {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .header-gradient-text {
-            background-image: linear-gradient(to right, #3b82f6, #22d3ee, #3b82f6); /* Blue-500 to Cyan-400 to Blue-500 */
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-pan 5s linear infinite;
-        }
-    </style>
-</head>
-<body class="flex flex-col min-h-screen">
+<section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
+    <div class="deco-shape w-48 h-48 rounded-full bg-pink-300/50 -top-10 -left-20"></div>
+    <div class="deco-shape w-60 h-60 rounded-xl bg-sky-300/50 top-20 -right-20 transform rotate-45" style="animation-delay: -2s;"></div>
+    <div class="deco-shape w-32 h-32 rounded-full bg-purple-300/50 bottom-10 left-1/4" style="animation-delay: -4s;"></div>
     
-    <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
-        <div class="container mx-auto px-6 py-2 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-2 z-20">
-                <img src="pic/logo/logodt.png" alt="Logo Đoàn Trường UEL" class="h-10 w-auto">
-                <span class="text-xl font-extrabold tracking-tight header-gradient-text">ĐOÀN TRƯỜNG UEL</span>
-            </a>
-
-            <nav class="hidden md:flex items-center space-x-8" id="main-nav"><a href="gioithieu.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Giới thiệu</a><a href="tochuc.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Tổ chức</a><a href="hoat-dong.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Hoạt động</a><a href="quy-trinh.html" class="nav-link text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Quy trình</a><a href="https://www.facebook.com/youth.uel" target="_blank" class="text-gray-600 hover:text-blue-600 font-semibold transition-colors duration-300">Liên hệ</a></nav>
-
-            <div class="flex items-center gap-4">
-                <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="hidden sm:block bg-blue-600 text-white font-bold py-2.5 px-6 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30">Đăng ký</a>
-                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none z-20">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+    <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
+        <div class="flex flex-wrap justify-center gap-4 mb-6">
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-blue-600 text-sm shadow-md">Bản lĩnh</div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-purple-600 text-sm shadow-md">Trách nhiệm</div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-pink-600 text-sm shadow-md">Vững vàng trong Kỷ nguyên số</div>
         </div>
-    </header>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 tracking-tight">Ngôi Nhà Chung Của Tuổi Trẻ UEL</h1>
+        <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+            Chào mừng bạn đến với gia đình của hơn 9.000 đoàn viên, thanh niên! Chúng tôi là người bạn đồng hành, tạo ra một môi trường năng động để mỗi cá nhân được rèn luyện, cống hiến và trưởng thành.
+        </p>
+    </div>
+</section>
 
-    <main class="flex-grow">
-        <section class="relative overflow-hidden py-20 md:py-24 bg-gradient-to-br from-pink-100 via-purple-100 to-sky-100">
-            <div class="deco-shape w-48 h-48 rounded-full bg-pink-300/50 -top-10 -left-20"></div>
-            <div class="deco-shape w-60 h-60 rounded-xl bg-sky-300/50 top-20 -right-20 transform rotate-45" style="animation-delay: -2s;"></div>
-            <div class="deco-shape w-32 h-32 rounded-full bg-purple-300/50 bottom-10 left-1/4" style="animation-delay: -4s;"></div>
-            
-            <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
-                <div class="flex flex-wrap justify-center gap-4 mb-6">
-                    <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-blue-600 text-sm shadow-md">Bản lĩnh</div>
-                    <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-purple-600 text-sm shadow-md">Trách nhiệm</div>
-                    <div class="bg-white/70 backdrop-blur-sm rounded-full px-5 py-2 font-semibold text-pink-600 text-sm shadow-md">Vững vàng trong Kỷ nguyên số</div>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 tracking-tight">Ngôi Nhà Chung Của Tuổi Trẻ UEL</h1>
-                <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
-                    Chào mừng bạn đến với gia đình của hơn 9.000 đoàn viên, thanh niên! Chúng tôi là người bạn đồng hành, tạo ra một môi trường năng động để mỗi cá nhân được rèn luyện, cống hiến và trưởng thành.
-                </p>
+<section class="py-20 md:py-24 bg-white">
+     <div class="container mx-auto px-6">
+        <div class="text-center mb-16 scroll-animate">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-800">Sứ Mệnh Của Chúng Tôi</h2>
+            <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Luôn nỗ lực không ngừng vì 3 mục tiêu cốt lõi:</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="text-center p-8 border-t-4 border-sky-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 100ms;">
+                 <h3 class="text-xl font-bold text-sky-600 mb-3">Xây dựng thế hệ sinh viên toàn diện</h3>
+                 <p class="text-slate-600">Bồi dưỡng lý tưởng cách mạng, lòng yêu nước, đạo đức và ý thức pháp luật cho thế hệ trẻ.</p>
             </div>
-        </section>
-
-        <section class="py-20 md:py-24 bg-white">
-             <div class="container mx-auto px-6">
-                <div class="text-center mb-16 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-800">Sứ Mệnh Của Chúng Tôi</h2>
-                    <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Luôn nỗ lực không ngừng vì 3 mục tiêu cốt lõi:</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <div class="text-center p-8 border-t-4 border-sky-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 100ms;">
-                         <h3 class="text-xl font-bold text-sky-600 mb-3">Xây dựng thế hệ sinh viên toàn diện</h3>
-                         <p class="text-slate-600">Bồi dưỡng lý tưởng cách mạng, lòng yêu nước, đạo đức và ý thức pháp luật cho thế hệ trẻ.</p>
-                    </div>
-                    <div class="text-center p-8 border-t-4 border-purple-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 200ms;">
-                         <h3 class="text-xl font-bold text-purple-600 mb-3">Tạo môi trường phát triển</h3>
-                         <p class="text-slate-600">Mở ra không gian để sinh viên xung kích, tình nguyện, sáng tạo trong học tập và cộng đồng.</p>
-                    </div>
-                     <div class="text-center p-8 border-t-4 border-pink-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 300ms;">
-                         <h3 class="text-xl font-bold text-pink-600 mb-3">Là người bạn đồng hành</h3>
-                         <p class="text-slate-600">Luôn sát cánh, hỗ trợ và kết nối để các bạn phát triển về mọi mặt.</p>
-                    </div>
-                </div>
+            <div class="text-center p-8 border-t-4 border-purple-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 200ms;">
+                 <h3 class="text-xl font-bold text-purple-600 mb-3">Tạo môi trường phát triển</h3>
+                 <p class="text-slate-600">Mở ra không gian để sinh viên xung kích, tình nguyện, sáng tạo trong học tập và cộng đồng.</p>
             </div>
-        </section>
-
-        <section class="py-20 md:py-24 bg-slate-50">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-800">Dấu Ấn Nhiệm Kỳ</h2>
-                    <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Những con số là minh chứng cho một hành trình nỗ lực không ngừng.</p>
-                </div>
-                <div id="stats-container" class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                    <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-sky-500/10 scroll-animate" style="transition-delay: 100ms;">
-                        <p class="text-4xl lg:text-5xl font-extrabold text-sky-500 stat-counter" data-target="460">0</p>
-                        <p class="mt-2 text-slate-500 font-semibold">Đề tài NCKH</p>
-                    </div>
-                    <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-rose-500/10 scroll-animate" style="transition-delay: 200ms;">
-                        <p class="text-4xl lg:text-5xl font-extrabold text-rose-500 stat-counter" data-target="1200">0</p>
-                        <p class="mt-2 text-slate-500 font-semibold">Đơn vị máu</p>
-                    </div>
-                    <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-emerald-500/10 scroll-animate" style="transition-delay: 300ms;">
-                         <p class="text-4xl lg:text-5xl font-extrabold text-emerald-500 stat-counter" data-target="31">0</p>
-                        <p class="mt-2 text-slate-500 font-semibold">CLB - Đội - Nhóm</p>
-                    </div>
-                     <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-amber-500/10 scroll-animate" style="transition-delay: 400ms;">
-                        <p class="text-4xl lg:text-5xl font-extrabold text-amber-500 stat-counter" data-target="98">0</p>
-                        <p class="mt-2 text-slate-500 font-semibold">% Có việc làm</p>
-                    </div>
-                </div>
+             <div class="text-center p-8 border-t-4 border-pink-400 bg-slate-50 rounded-2xl scroll-animate shadow-sm" style="transition-delay: 300ms;">
+                 <h3 class="text-xl font-bold text-pink-600 mb-3">Là người bạn đồng hành</h3>
+                 <p class="text-slate-600">Luôn sát cánh, hỗ trợ và kết nối để các bạn phát triển về mọi mặt.</p>
             </div>
-        </section>
-
-        <section class="py-20 md:py-24 bg-white">
-             <div class="container mx-auto px-6">
-                <div class="text-center mb-16 scroll-animate">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Các Phong Trào Hành Động</h2>
-                    <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Mỗi ngày ở UEL đều là một cơ hội để bạn trải nghiệm và lớn lên qua các phong trào sôi nổi.</p>
-                </div>
-
-                <div class="max-w-5xl mx-auto">
-                    <div id="activity-tabs" class="flex flex-col sm:flex-row justify-center gap-4 mb-8 bg-slate-100 p-2 rounded-xl scroll-animate">
-                        <button data-target="content-sang-tao" class="activity-tab active bg-blue-500 shadow-blue-500/40 p-3 rounded-lg font-semibold text-slate-700">🎓 Tuổi trẻ Sáng tạo</button>
-                        <button data-target="content-tinh-nguyen" class="activity-tab p-3 rounded-lg font-semibold text-slate-700 shadow-rose-500/40 bg-white">❤️ Thanh niên Tình nguyện</button>
-                        <button data-target="content-dong-hanh" class="activity-tab p-3 rounded-lg font-semibold text-slate-700 shadow-teal-500/40 bg-white">🤝 Đồng hành cùng Sinh viên</button>
-                    </div>
-
-                    <div class="scroll-animate bg-slate-50 p-8 rounded-2xl min-h-[20rem]" style="transition-delay: 150ms;">
-                        <div id="content-sang-tao" class="activity-content">
-                             <ul class="space-y-4 text-slate-600">
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Nghiên cứu khoa học:</strong> Tổ chức tọa đàm, khóa học, khuyến khích sinh viên tham gia nghiên cứu.</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Giải thưởng danh giá:</strong> Hỗ trợ sinh viên tham gia và đạt thành tích cao tại các giải thưởng lớn như "Euréka".</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Sân chơi học thuật:</strong> 16 CLB học thuật cùng hàng loạt cuộc thi chuyên ngành quy mô toàn quốc.</span></li>
-                             </ul>
-                        </div>
-                        <div id="content-tinh-nguyen" class="activity-content hidden">
-                             <ul class="space-y-4 text-slate-600">
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Các chiến dịch lớn:</strong> Mùa hè xanh, Xuân tình nguyện, Tiếp sức mùa thi là những dấu ấn thanh xuân không thể nào quên.</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Hoạt động thường xuyên:</strong> Hiến máu tình nguyện, "Chủ nhật xanh" bảo vệ môi trường và nhiều hoạt động an sinh xã hội.</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Chuyên môn hóa hoạt động:</strong> Tổ chức các phiên tòa giả định, tư vấn pháp luật miễn phí cho người dân.</span></li>
-                             </ul>
-                        </div>
-                        <div id="content-dong-hanh" class="activity-content hidden">
-                             <ul class="space-y-4 text-slate-600">
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Học tập:</strong> Tổ chức các chương trình hưởng ứng "Mùa thi nghiêm túc", các lớp học thuật, diễn đàn chia sẻ kiến thức.</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Nghề nghiệp - Khởi nghiệp:</strong> Tổ chức Ngày hội việc làm, talkshow định hướng và phát động phong trào khởi nghiệp.</span></li>
-                                <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Kỹ năng & Đời sống tinh thần:</strong> Đa dạng các workshop kỹ năng, hội thao, sân chơi văn nghệ và hoạt động chăm sóc sức khỏe tâm thần.</span></li>
-                             </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
-            <div class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 opacity-50 filter blur-3xl"></div>
-            <div class="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full translate-x-1/2 translate-y-1/2 opacity-50 filter blur-3xl"></div>
-            <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
-                <h2 class="text-3xl md:text-4xl font-bold">Làm Sao Để Gia Nhập Ngôi Nhà Chung?</h2>
-                <p class="max-w-xl mx-auto mt-4 text-purple-200">Trở thành một phần của Đoàn Trường UEL là bạn đã chọn cho mình một hành trình tuổi trẻ đầy sôi động và ý nghĩa.</p>
-                <div class="mt-8">
-                     <a href="quy-trinh.html" class="bg-white text-blue-600 font-bold text-lg py-3 px-10 rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-purple-500/30 inline-block">
-                        Tìm Hiểu Quy Trình Tuyển Chọn
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <div id="mobile-menu" class="fixed inset-0 z-40 md:hidden">
-        <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/60"></div>
-        <div id="mobile-menu-panel" class="relative z-50 bg-white w-4/5 max-w-sm h-full ml-auto p-6 shadow-xl flex flex-col">
-            <div class="flex justify-end items-center mb-8">
-                 <button id="mobile-menu-close-button" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                 </button>
-            </div>
-            <nav class="flex flex-col space-y-4 text-lg">
-                <a href="gioithieu.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Giới thiệu</a>
-                <a href="tochuc.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Tổ chức</a>
-                <a href="hoat-dong.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Hoạt động</a>
-                <a href="quy-trinh.html" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Quy trình</a>
-                <a href="https://www.facebook.com/youth.uel" target="_blank" class="nav-link text-gray-700 hover:text-blue-600 font-semibold py-2">Liên hệ</a>
-            </nav>
-            <a href="https://docs.google.com/forms/your-form-link-here" target="_blank" class="w-full mt-auto text-center bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-all duration-300">Đăng ký Ngay</a>
         </div>
     </div>
+</section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // SCROLL ANIMATE
-            const animatedElements = document.querySelectorAll('.scroll-animate');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target); 
-                    }
-                });
-            }, { threshold: 0.1 });
-            animatedElements.forEach(el => observer.observe(el));
-            
-            // ANIMATED COUNTER
-            const statsContainer = document.getElementById('stats-container');
-            if(statsContainer){
-                const statsObserver = new IntersectionObserver((entries) => {
-                    if (entries[0].isIntersecting) {
-                        const counters = statsContainer.querySelectorAll('.stat-counter');
-                        counters.forEach(counter => {
-                            const target = +counter.getAttribute('data-target');
-                            let current = 0;
-                            const increment = target / 100;
+<section class="py-20 md:py-24 bg-slate-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 scroll-animate">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-800">Dấu Ấn Nhiệm Kỳ</h2>
+            <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Những con số là minh chứng cho một hành trình nỗ lực không ngừng.</p>
+        </div>
+        <div id="stats-container" class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-sky-500/10 scroll-animate" style="transition-delay: 100ms;">
+                <p class="text-4xl lg:text-5xl font-extrabold text-sky-500 stat-counter" data-target="460">0</p>
+                <p class="mt-2 text-slate-500 font-semibold">Đề tài NCKH</p>
+            </div>
+            <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-rose-500/10 scroll-animate" style="transition-delay: 200ms;">
+                <p class="text-4xl lg:text-5xl font-extrabold text-rose-500 stat-counter" data-target="1200">0</p>
+                <p class="mt-2 text-slate-500 font-semibold">Đơn vị máu</p>
+            </div>
+            <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-emerald-500/10 scroll-animate" style="transition-delay: 300ms;">
+                 <p class="text-4xl lg:text-5xl font-extrabold text-emerald-500 stat-counter" data-target="31">0</p>
+                <p class="mt-2 text-slate-500 font-semibold">CLB - Đội - Nhóm</p>
+            </div>
+             <div class="stat-card bg-white p-6 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-amber-500/10 scroll-animate" style="transition-delay: 400ms;">
+                <p class="text-4xl lg:text-5xl font-extrabold text-amber-500 stat-counter" data-target="98">0</p>
+                <p class="mt-2 text-slate-500 font-semibold">% Có việc làm</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-                            const updateCounter = () => {
-                                if (current < target) {
-                                    current += increment;
-                                    counter.innerText = Math.ceil(current).toLocaleString();
-                                    requestAnimationFrame(updateCounter);
-                                } else {
-                                    counter.innerText = target.toLocaleString();
-                                }
-                            };
-                            updateCounter();
-                        });
-                        statsObserver.unobserve(statsContainer);
-                    }
-                }, { threshold: 0.8 });
-                statsObserver.observe(statsContainer);
-            }
+<section class="py-20 md:py-24 bg-white">
+     <div class="container mx-auto px-6">
+        <div class="text-center mb-16 scroll-animate">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Các Phong Trào Hành Động</h2>
+            <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Mỗi ngày ở UEL đều là một cơ hội để bạn trải nghiệm và lớn lên qua các phong trào sôi nổi.</p>
+        </div>
 
-            // ACTIVITY TABS
-            const tabsContainer = document.getElementById('activity-tabs');
-            if (tabsContainer) {
-                const tabs = tabsContainer.querySelectorAll('.activity-tab');
-                const contents = document.querySelectorAll('.activity-content');
-                const tabColors = {
-                    'content-sang-tao': 'bg-blue-500',
-                    'content-tinh-nguyen': 'bg-rose-500',
-                    'content-dong-hanh': 'bg-teal-500'
-                };
-                
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        const targetId = tab.getAttribute('data-target');
+        <div class="max-w-5xl mx-auto">
+            <div id="activity-tabs" class="flex flex-col sm:flex-row justify-center gap-4 mb-8 bg-slate-100 p-2 rounded-xl scroll-animate">
+                <button data-target="content-sang-tao" class="activity-tab active bg-blue-500 shadow-blue-500/40 p-3 rounded-lg font-semibold text-slate-700">🎓 Tuổi trẻ Sáng tạo</button>
+                <button data-target="content-tinh-nguyen" class="activity-tab p-3 rounded-lg font-semibold text-slate-700 shadow-rose-500/40 bg-white">❤️ Thanh niên Tình nguyện</button>
+                <button data-target="content-dong-hanh" class="activity-tab p-3 rounded-lg font-semibold text-slate-700 shadow-teal-500/40 bg-white">🤝 Đồng hành cùng Sinh viên</button>
+            </div>
 
-                        tabs.forEach(item => {
-                            item.classList.remove('active', 'bg-blue-500', 'bg-rose-500', 'bg-teal-500');
-                            item.classList.add('bg-white');
-                        });
-                        
-                        tab.classList.add('active');
-                        tab.classList.remove('bg-white');
-                        tab.classList.add(tabColors[targetId]);
-                        
-                        contents.forEach(content => {
-                            if (content.id === targetId) {
-                                content.classList.remove('hidden');
-                            } else {
-                                content.classList.add('hidden');
-                            }
-                        });
-                    });
-                });
-            }
+            <div class="scroll-animate bg-slate-50 p-8 rounded-2xl min-h-[20rem]" style="transition-delay: 150ms;">
+                <div id="content-sang-tao" class="activity-content">
+                     <ul class="space-y-4 text-slate-600">
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Nghiên cứu khoa học:</strong> Tổ chức tọa đàm, khóa học, khuyến khích sinh viên tham gia nghiên cứu.</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Giải thưởng danh giá:</strong> Hỗ trợ sinh viên tham gia và đạt thành tích cao tại các giải thưởng lớn như "Euréka".</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Sân chơi học thuật:</strong> 16 CLB học thuật cùng hàng loạt cuộc thi chuyên ngành quy mô toàn quốc.</span></li>
+                     </ul>
+                </div>
+                <div id="content-tinh-nguyen" class="activity-content hidden">
+                     <ul class="space-y-4 text-slate-600">
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Các chiến dịch lớn:</strong> Mùa hè xanh, Xuân tình nguyện, Tiếp sức mùa thi là những dấu ấn thanh xuân không thể nào quên.</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Hoạt động thường xuyên:</strong> Hiến máu tình nguyện, "Chủ nhật xanh" bảo vệ môi trường và nhiều hoạt động an sinh xã hội.</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Chuyên môn hóa hoạt động:</strong> Tổ chức các phiên tòa giả định, tư vấn pháp luật miễn phí cho người dân.</span></li>
+                     </ul>
+                </div>
+                <div id="content-dong-hanh" class="activity-content hidden">
+                     <ul class="space-y-4 text-slate-600">
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Học tập:</strong> Tổ chức các chương trình hưởng ứng "Mùa thi nghiêm túc", các lớp học thuật, diễn đàn chia sẻ kiến thức.</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Nghề nghiệp - Khởi nghiệp:</strong> Tổ chức Ngày hội việc làm, talkshow định hướng và phát động phong trào khởi nghiệp.</span></li>
+                        <li class="flex items-start"><span class="w-5 h-5 mr-4 mt-1 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span><span><strong class="font-semibold text-slate-800">Kỹ năng & Đời sống tinh thần:</strong> Đa dạng các workshop kỹ năng, hội thao, sân chơi văn nghệ và hoạt động chăm sóc sức khỏe tâm thần.</span></li>
+                     </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-            // ACTIVE NAV LINK
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentPath = window.location.pathname.split('/').pop();
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('nav-active');
-                }
-            });
-
-            // ROBUST SCRIPT FOR MOBILE MENU
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenuCloseButton = document.getElementById('mobile-menu-close-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
-
-            const openMenu = () => {
-                mobileMenu.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-            };
-
-            const closeMenu = () => {
-                mobileMenu.classList.remove('is-open');
-                document.body.style.overflow = '';
-            };
-
-            mobileMenuButton.addEventListener('click', () => {
-                if (mobileMenu.classList.contains('is-open')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            });
-            
-            mobileMenuCloseButton.addEventListener('click', closeMenu);
-            mobileMenuBackdrop.addEventListener('click', closeMenu);
-        });
-    </script>
-</body>
-</html>
+<section class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-purple-600 text-white py-20">
+    <div class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 opacity-50 filter blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full translate-x-1/2 translate-y-1/2 opacity-50 filter blur-3xl"></div>
+    <div class="container mx-auto px-6 text-center relative z-10 scroll-animate">
+        <h2 class="text-3xl md:text-4xl font-bold">Làm Sao Để Gia Nhập Ngôi Nhà Chung?</h2>
+        <p class="max-w-xl mx-auto mt-4 text-purple-200">Trở thành một phần của Đoàn Trường UEL là bạn đã chọn cho mình một hành trình tuổi trẻ đầy sôi động và ý nghĩa.</p>
+        <div class="mt-8">
+             <a href="#quy-trinh" data-page="quy-trinh" class="nav-trigger bg-white text-blue-600 font-bold text-lg py-3 px-10 rounded-full hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-purple-500/30 inline-block">
+                Tìm Hiểu Quy Trình Tuyển Chọn
+            </a>
+        </div>
+    </div>
+</section>
